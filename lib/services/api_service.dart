@@ -2,22 +2,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  // Singleton padrão
+  // Singleton
   static final ApiService instance = ApiService._internal();
   factory ApiService() => instance;
 
-  // Altere o IP abaixo se for rodar em celular físico
+  // Altere esse IP se rodar no celular físico
   final String baseUrl = 'http://10.0.2.2:8080/api';
 
-  // Construtor privado
   ApiService._internal();
 
-  // Requisição GET com suporte a headers e params (params ainda não aplicados no Uri)
-  Future<http.Response> get(
-      String endpoint, {
-        Map<String, String>? headers,
-        Map<String, String>? params,
-      }) async {
+  // GET padrão
+  Future<http.Response> get(String endpoint,
+      {Map<String, String>? headers, Map<String, String>? params}) async {
     Uri uri = Uri.parse('$baseUrl$endpoint');
     if (params != null && params.isNotEmpty) {
       uri = uri.replace(queryParameters: params);
@@ -25,12 +21,9 @@ class ApiService {
     return await http.get(uri, headers: headers);
   }
 
-  // Requisição POST padrão (JSON)
-  Future<http.Response> post(
-      String endpoint, {
-        Map<String, String>? headers,
-        Object? body,
-      }) async {
+  // POST com JSON
+  Future<http.Response> post(String endpoint,
+      {Map<String, String>? headers, Object? body}) async {
     final uri = Uri.parse('$baseUrl$endpoint');
     return await http.post(
       uri,
@@ -39,25 +32,43 @@ class ApiService {
     );
   }
 
-  // Requisição POST com multipart/form-data (para envio de arquivos)
-  Future<http.Response> postMultipart(
-      String endpoint,
-      Map<String, String> fields, {
-        Map<String, http.MultipartFile>? files,
-      }) async {
+  // DELETE
+  Future<http.Response> delete(String endpoint) async {
+    final uri = Uri.parse('$baseUrl$endpoint');
+    return await http.delete(uri);
+  }
+
+  // POST multipart (com arquivos)
+  Future<http.Response> postMultipart(String endpoint, Map<String, String> fields,
+      {Map<String, http.MultipartFile>? files}) async {
     final uri = Uri.parse('$baseUrl$endpoint');
     var request = http.MultipartRequest('POST', uri);
     request.fields.addAll(fields);
     if (files != null) {
       request.files.addAll(files.values);
     }
+
     final streamedResponse = await request.send();
     return await http.Response.fromStream(streamedResponse);
   }
 
-  // Requisição DELETE
-  Future<http.Response> delete(String endpoint) async {
+  // ✅ PUT multipart (com arquivos)
+  Future<http.Response> putMultipart(String endpoint, Map<String, String> fields,
+      {Map<String, http.MultipartFile>? files}) async {
     final uri = Uri.parse('$baseUrl$endpoint');
-    return await http.delete(uri);
+    var request = http.MultipartRequest('PUT', uri); // PUT correto
+
+    request.fields.addAll(fields);
+    if (files != null) {
+      request.files.addAll(files.values);
+    }
+
+    // Debug
+    print('PUT → $uri');
+    print('Fields: ${request.fields}');
+    print('Files: ${request.files.map((f) => f.filename).toList()}');
+
+    final streamedResponse = await request.send();
+    return await http.Response.fromStream(streamedResponse);
   }
 }

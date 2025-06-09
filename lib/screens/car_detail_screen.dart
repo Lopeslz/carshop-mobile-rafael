@@ -53,19 +53,6 @@ class CarDetailScreen extends StatelessWidget {
             Text("Variante: ${car.variant}"),
             const SizedBox(height: 24),
 
-            ElevatedButton.icon(
-              icon: const Icon(Icons.calendar_today),
-              label: const Text("Agendar Encontro"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ScheduleScreen(car: car),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 12),
 
             ElevatedButton.icon(
               icon: const Icon(Icons.chat),

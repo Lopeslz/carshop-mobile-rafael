@@ -32,8 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       HomeContent(userId: widget.userId),
       const SearchScreen(),
       ConversationListScreen(userId: int.parse(widget.userId)),
-      CarFormScreen(userId: widget.userId),
-      AccountScreen(userId: widget.userId),
+      CarFormScreen(userId: widget.userId)
     ];
   }
 
@@ -94,10 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.add_a_photo, color: Colors.black54),
             label: 'Anunciar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: Colors.black54),
-            label: 'Conta',
           ),
         ],
         currentIndex: _selectedIndex,

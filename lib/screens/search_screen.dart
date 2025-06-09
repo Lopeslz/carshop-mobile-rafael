@@ -6,7 +6,7 @@ import '../models/car.dart';
 import 'dart:convert';
 import '../services/api_service.dart';
 import '../widgets/car_card.dart';
-import 'schedule_screen.dart';
+import 'car_detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -97,7 +97,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ScheduleScreen(car: car),
+                        builder: (_) => CarDetailScreen(
+                          car: car,
+                          currentUserId: car.sellerId.toString(), // ou use o userId logado se você tiver
+                          sellerId: car.sellerId.toString(),
+                        ),
                       ),
                     );
                   },
